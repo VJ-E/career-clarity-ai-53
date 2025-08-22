@@ -1,6 +1,5 @@
-# Career Clarity AI
+# Resume Analyzer
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![React](https://img.shields.io/badge/React-18.0+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -28,8 +27,8 @@ An intelligent career development platform that helps job seekers optimize their
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/career-clarity-ai.git
-   cd career-clarity-ai
+   git clone https://github.com/vj-e/resume-analyzer.git
+   cd resume-analyzer
    ```
 
 2. **Set up the backend**
