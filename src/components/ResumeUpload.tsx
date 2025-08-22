@@ -1,49 +1,82 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, FileText, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { useAIAnalysis } from './AIAnalysisEngine';
 
 interface ResumeUploadProps {
-  onFileUpload: (file: File, content: string) => void;
-  isProcessing: boolean;
+  // New props
+  onAnalysisComplete?: (analysis: any) => void;
+  onError?: (error: string) => void;
+  // Legacy props (for backward compatibility)
+  onFileUpload?: (file: File, content: string) => void;
+  isProcessing?: boolean;
 }
 
-export const ResumeUpload = ({ onFileUpload, isProcessing }: ResumeUploadProps) => {
+export const ResumeUpload = ({
+  onAnalysisComplete,
+  onError,
+  // Legacy props with defaults
+  onFileUpload,
+  isProcessing = false,
+}: ResumeUploadProps) => {
   const { toast } = useToast();
+  const { analyzeResume, isLoading: isAnalyzing, error } = useAIAnalysis();
+  // Use the new loading state or fall back to the legacy isProcessing prop
+  const isLoading = isAnalyzing || isProcessing;
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAnalysis = useCallback(async (file: File) => {
+    setUploadStatus('processing');
+    
+    try {
+      // Read file as text for initial preview
+      const content = await file.text();
+      
+      // If using the legacy onFileUpload prop
+      if (onFileUpload) {
+        onFileUpload(file, content);
+      } 
+      // If using the new onAnalysisComplete prop
+      else if (onAnalysisComplete) {
+        // Start the actual analysis
+        const analysis = await analyzeResume(file, content);
+        setUploadStatus('success');
+        onAnalysisComplete(analysis);
+        
+        toast({
+          title: "Analysis Complete",
+          description: "Your resume has been analyzed successfully!",
+        });
+      } else {
+        throw new Error('No callback provided for handling the uploaded file');
+      }
+    } catch (error) {
+      console.error('Error during analysis:', error);
+      setUploadStatus('error');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to analyze resume';
+      
+      toast({
+        title: "Analysis Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      
+      if (onError) {
+        onError(errorMessage);
+      }
+    }
+  }, [analyzeResume, onAnalysisComplete, onError, toast]);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (!file) return;
-
-    setUploadStatus('processing');
     
-    try {
-      // Simulate file processing for now
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target?.result as string;
-        onFileUpload(file, content);
-        setUploadStatus('success');
-        toast({
-          title: "Resume uploaded successfully",
-          description: "AI analysis starting...",
-        });
-      };
-      reader.readAsText(file);
-    } catch (error) {
-      setUploadStatus('error');
-      toast({
-        title: "Upload failed",
-        description: "Please try again with a different file.",
-        variant: "destructive",
-      });
-    }
-  }, [onFileUpload, toast]);
+    await handleAnalysis(file);
+  }, [handleAnalysis]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -53,7 +86,7 @@ export const ResumeUpload = ({ onFileUpload, isProcessing }: ResumeUploadProps) 
       'text/plain': ['.txt']
     },
     maxFiles: 1,
-    disabled: isProcessing
+    disabled: isLoading
   });
 
   const getStatusIcon = () => {
@@ -97,7 +130,11 @@ export const ResumeUpload = ({ onFileUpload, isProcessing }: ResumeUploadProps) 
             : 'border-border hover:border-primary/50'
         }`}
       >
-        <input {...getInputProps()} />
+        <input 
+      {...getInputProps()} 
+      ref={fileInputRef}
+      disabled={isLoading}
+    />
         
         <div className="flex flex-col items-center gap-4">
           <div className={`p-4 rounded-full ${
@@ -117,10 +154,19 @@ export const ResumeUpload = ({ onFileUpload, isProcessing }: ResumeUploadProps) 
             </p>
           </div>
 
-          {uploadStatus === 'idle' && (
-            <Button variant="outline" className="mt-4">
-              <FileText className="w-4 h-4 mr-2" />
-              Choose File
+          {(uploadStatus === 'idle' || uploadStatus === 'error') && (
+            <Button 
+              variant="outline" 
+              className="mt-4"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <FileText className="w-4 h-4 mr-2" />
+              )}
+              {isLoading ? 'Analyzing...' : 'Choose File'}
             </Button>
           )}
         </div>

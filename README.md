@@ -1,54 +1,112 @@
-# Welcome to your Lovable project
+# Career Clarity AI
 
-## Project info
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![React](https://img.shields.io/badge/React-18.0+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 
-**URL**: https://lovable.dev/projects/09546b17-64bb-4c47-8f32-e1fcafa98365
+An intelligent career development platform that helps job seekers optimize their resumes, identify skill gaps, and improve their chances of landing their dream jobs using AI-powered analysis.
 
-## How can I edit this code?
+## ✨ Features
 
-There are several ways of editing your application.
+- **Resume Parsing**: Extract and analyze information from PDF, DOCX, and TXT resumes
+- **Role Classification**: AI-powered role prediction based on resume content
+- **Skill Gap Analysis**: Identify missing skills for target job roles
+- **ATS Optimization**: Get your resume past Applicant Tracking Systems
+- **Interactive Dashboard**: Beautiful, responsive UI built with React and shadcn/ui
+- **RESTful API**: FastAPI backend with comprehensive documentation
 
-**Use Lovable**
+## 🚀 Quick Start
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/09546b17-64bb-4c47-8f32-e1fcafa98365) and start prompting.
+### Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js 18+ and npm/yarn
+- Python 3.8+
+- Git
 
-**Use your preferred IDE**
+### Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/career-clarity-ai.git
+   cd career-clarity-ai
+   ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+2. **Set up the backend**
+   ```bash
+   cd backend
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-Follow these steps:
+3. **Set up the frontend**
+   ```bash
+   cd ../frontend
+   npm install
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Running the Application
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. **Start the backend server** (from the backend directory)
+   ```bash
+   uvicorn main:app --reload
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. **Start the frontend development server** (from the frontend directory)
+   ```bash
+   npm run dev
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+3. Open your browser to `http://localhost:3000`
 
-**Edit a file directly in GitHub**
+## 🛠️ Tech Stack
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **Frontend**: 
+  - React 18 with TypeScript
+  - Vite for build tooling
+  - shadcn/ui for beautiful, accessible components
+  - React Query for data fetching
+  - Tailwind CSS for styling
 
-**Use GitHub Codespaces**
+- **Backend**:
+  - FastAPI
+  - PyMuPDF for PDF processing
+  - python-docx for DOCX processing
+  - Sentence Transformers for NLP tasks
+  - scikit-learn for similarity calculations
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📚 API Documentation
+
+Once the backend server is running, visit `http://localhost:8000/docs` for interactive API documentation.
+
+### Key Endpoints
+
+- `POST /parse-resume`: Upload and parse a resume file
+- `POST /classify-role`: Get role predictions for a resume
+- `POST /analyze-skill-gap`: Analyze skill gaps for a target role
+- `POST /ats-score`: Get ATS optimization suggestions
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful component library
+- [FastAPI](https://fastapi.tiangolo.com/) for the amazing backend framework
+- [Hugging Face](https://huggingface.co/) for the transformer models
+- All contributors and open-source maintainers who made this project possible
 
 ## What technologies are used for this project?
 

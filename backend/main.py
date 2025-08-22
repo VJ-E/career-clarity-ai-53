@@ -223,8 +223,8 @@ async def skill_gap(payload: SkillGapInput):
 # ---- ATS SCORING ----
 import re
 from collections import Counter
-
 from pydantic import BaseModel
+from typing import List, Dict
 
 class ATSInput(BaseModel):
     resume_text: str
